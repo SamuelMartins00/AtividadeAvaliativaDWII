@@ -1,38 +1,35 @@
-// --- MÓDULO 1: Variáveis Globais ---
-const precoCombustivel = parseFloat(prompt("Digite o preço do litro de combustível (R$):"));
-
+// -- exercício 1
 const listaDePedidos = [];
-let continuar = true;
 
-// --- MÓDULO 4: Loop Principal para múltiplos pedidos ---
-do {
-  // MÓDULO 2: Coleta e Validações
-  let codigo = prompt("Digite o código do pedido:");
-  
-  // Validação de código único e não vazio
+function adicionarPedido() {
+  const precoCombustivel = parseFloat(document.getElementById("precoCombustivel").value);
+  const codigo = document.getElementById("codigo").value.trim;
+  const regiao = parseInt(document.getElementById("regiao").value);
+  const distancia = parseFloat(document.getElementById("distancia").value);
+  const qtdPecas = parseInt(document.getElementById("qtdPecas").value);
+  const temRastreamento = document.getElementById("temRastreamento").checked;
+
+  if (isNaN(precoCombustivel) || precoCombustivel <= 0) {
+    alert("Informe um preço de combustível válido!");
+    return;
+  }
+
   const codigosExistentes = listaDePedidos.map(p => p.codigo);
-  while (!codigo || codigosExistentes.includes(codigo)) {
-    codigo = prompt("Código inválido ou já cadastrado! Digite outro:");
+  if (!codigo || codigosExistentes.includes(codigo)) {
+    alert("Código inválido ou já cadastrado!");
+    return;
   }
 
-  let regiao = parseInt(prompt("Selecione a Região:\n1 - Sudeste\n2 - Sul\n3 - Centro-Oeste"));
-  while (regiao !== 1 && regiao !== 2 && regiao !== 3) {
-    regiao = parseInt(prompt("Região inválida! Opções: 1, 2 ou 3:"));
+  if (isNaN(distancia) || distancia <= 0) {
+    alert("Distância inválida!");
+    return;
   }
 
-  let distancia = parseFloat(prompt("Digite a distância (km):"));
-  while (isNaN(distancia) || distancia <= 0) {
-    distancia = parseFloat(prompt("Distância inválida! Digite um valor positivo:"));
+  if (isNaN(qtdPecas) || qtdPecas <= 0) {
+    alert("Quantidade de peças inválida!");
+    return;
   }
 
-  let qtdPecas = parseInt(prompt("Digite a quantidade de peças:"));
-  while (isNaN(qtdPecas) || qtdPecas <= 0) {
-    qtdPecas = parseInt(prompt("Quantidade inválida! Digite um valor positivo:"));
-  }
-
-  let temRastreamento = prompt("Deseja rastreamento? (S/N)").toUpperCase() === "S";
-
-  // MÓDULO 3: Cálculos e Regras de Negócio
   let valorPorPeca = 0;
   switch (regiao) {
     case 1: valorPorPeca = 1.20; break;
@@ -52,46 +49,76 @@ do {
   const taxaRastreamento = temRastreamento ? 200 : 0;
   const valorTotal = custoDistancia + custoPecas + taxaRastreamento;
 
-  // Salva no Array de Objetos
-  listaDePedidos.push({
-    codigo,
-    regiao,
-    valorTotal
-  });
+  listaDePedidos.push({ codigo, regiao, valorTotal });
 
-  continuar = prompt("Deseja cadastrar outro pedido? (S/N)").toUpperCase() === "S";
+  alert(`Pedido ${codigo} adicionado com sucesso!`);
 
-} while (continuar);
-
-// --- MÓDULO 5: Processamento dos Dados ---
-let somaTotal = 0;
-let totalRegiao1 = 0;
-let totalRegiao2 = 0;
-let totalRegiao3 = 0;
-
-let pedidoMaisCaro = listaDePedidos[0];
-let pedidoMaisBarato = listaDePedidos[0];
-
-for (const p of listaDePedidos) {
-  somaTotal += p.valorTotal;
-
-  if (p.regiao === 1) totalRegiao1 += p.valorTotal;
-  if (p.regiao === 2) totalRegiao2 += p.valorTotal;
-  if (p.regiao === 3) totalRegiao3 += p.valorTotal;
-
-  if (p.valorTotal > pedidoMaisCaro.valorTotal) pedidoMaisCaro = p;
-  if (p.valorTotal < pedidoMaisBarato.valorTotal) pedidoMaisBarato = p;
+  document.getElementById("formPedido").reset();
 }
 
-const valorMedio = somaTotal / listaDePedidos.length;
+function gerarRelatorio() {
+  if (listaDePedidos.length === 0) {
+    alert("Nenhum pedido foi cadastrado!");
+    return;
+  }
 
-// --- MÓDULO 6: Relatório Final ---
-console.log("RELATÓRIO FINAL");
-console.log(`Número Total de Pedidos: ${listaDePedidos.length}`);
-console.log(`Valor Médio por Pedido: R$ ${valorMedio.toFixed(2)}`);
-console.log(`Valor Total Acumulado por Região:`);
-console.log(`Sudeste (Região 1): R$ ${totalRegiao1.toFixed(2)}`);
-console.log(`Sul (Região 2): R$ ${totalRegiao2.toFixed(2)}`);
-console.log(`Centro-Oeste (Região 3): R$ ${totalRegiao3.toFixed(2)}`);
-console.log(`Pedido Mais Caro: ${pedidoMaisCaro.codigo} (R$ ${pedidoMaisCaro.valorTotal.toFixed(2)})`);
-console.log(`Pedido Mais Barato: ${pedidoMaisBarato.codigo} (R$ ${pedidoMaisBarato.valorTotal.toFixed(2)})`);
+  let somaTotal = 0;
+  let totalRegiao1 = 0;
+  let totalRegiao2 = 0;
+  let totalRegiao3 = 0;
+
+  let pedidoMaisCaro = listaDePedidos[0];
+  let pedidoMaisBarato = listaDePedidos[0];
+
+  for (const p of listaDePedidos) {
+    somaTotal += p.valorTotal;
+
+    if (p.regiao === 1) totalRegiao1 += p.valorTotal;
+    if (p.regiao === 2) totalRegiao2 += p.valorTotal;
+    if (p.regiao === 3) totalRegiao3 += p.valorTotal;
+
+    if (p.valorTotal > pedidoMaisCaro.valorTotal) pedidoMaisCaro = p;
+    if (p.valorTotal < pedidoMaisBarato.valorTotal) pedidoMaisBarato = p;
+  }
+
+  const valorMedio = somaTotal / listaDePedidos.length;
+
+  const divResultado = document.getElementById("resultado");
+  divResultado.innerHTML = `
+    <h3>RELATÓRIO FINAL</h3>
+    <p><strong>Número Total de Pedidos:</strong> ${listaDePedidos.length}</p>
+    <p><strong>Valor Médio por Pedido:</strong> R$ ${valorMedio.toFixed(2)}</p>
+    <h4>Valor Total Acumulado por Região:</h4>
+    <ul>
+      <li>Sudeste (Região 1): R$ ${totalRegiao1.toFixed(2)}</li>
+      <li>Sul (Região 2): R$ ${totalRegiao2.toFixed(2)}</li>
+      <li>Centro-Oeste (Região 3): R$ ${totalRegiao3.toFixed(2)}</li>
+    </ul>
+    <p><strong>Pedido Mais Caro:</strong> ${pedidoMaisCaro.codigo} (R$ ${pedidoMaisCaro.valorTotal.toFixed(2)})</p>
+    <p><strong>Pedido Mais Barato:</strong> ${pedidoMaisBarato.codigo} (R$ ${pedidoMaisBarato.valorTotal.toFixed(2)})</p>
+  `;
+}
+
+// ---------------------------------
+
+// -- exercício 2
+const listaDeFuncionario = []
+
+function cadastrarFuncionario(){
+  const codigoFuncionario = document.getElementById("codigoFuncionario").value.trim;
+  const horasTrabalhas  = parseFloat(document.getElementById("horasTrabalhadas").value);
+  const categoriaFuncionario = parseInt(document.getElementById("categoriaFuncionario").value);
+  const turnoTrabalho = parseInt(document.getElementById("turnoTrabalho").value);
+  const avaliacaoGeral = parseInt(document.getElementById("avaliacaoGeral").value);
+
+  const codigosFunExistentes = listaDeFuncionario.map(p => p.codigoFuncionario);
+  if (!codigoFuncionario || codigosFunExistentes.includes(codigoFuncionario)) {
+    alert("Código do funcionário inválido ou já cadastrado!");
+    return;
+  }
+
+  if (isNaN(categoriaFuncionario) || categoriaFuncionario < 0 || categoriaFuncionario > 10) {
+    alert("Avaliação de desempenho mensal do funcionário inválida!");
+    return;
+  }
+}
