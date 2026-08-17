@@ -1,14 +1,16 @@
-// -- exercício 1
+// -- Exercício 1 – Frete com múltiplos pedidos e relatório final
 const listaDePedidos = [];
 
 function adicionarPedido() {
+  // entrada
   const precoCombustivel = parseFloat(document.getElementById("precoCombustivel").value);
-  const codigo = document.getElementById("codigo").value.trim;
+  const codigo = document.getElementById("codigo").value.trim();
   const regiao = parseInt(document.getElementById("regiao").value);
   const distancia = parseFloat(document.getElementById("distancia").value);
   const qtdPecas = parseInt(document.getElementById("qtdPecas").value);
   const temRastreamento = document.getElementById("temRastreamento").checked;
 
+  // validação
   if (isNaN(precoCombustivel) || precoCombustivel <= 0) {
     alert("Informe um preço de combustível válido!");
     return;
@@ -30,6 +32,7 @@ function adicionarPedido() {
     return;
   }
 
+  //cálculo
   let valorPorPeca = 0;
   switch (regiao) {
     case 1: valorPorPeca = 1.20; break;
@@ -99,17 +102,25 @@ function gerarRelatorio() {
   `;
 }
 
-// ---------------------------------
+// --------------------------------------------------------------------------------------------
 
-// -- exercício 2
+// -- Exercício 2 – Sistema Avançado de Folha de Pagamento com Bônus de Desempenho e Relatório Mensal
 const listaDeFuncionario = []
 
-function cadastrarFuncionario(){
-  const codigoFuncionario = document.getElementById("codigoFuncionario").value.trim;
-  const horasTrabalhas  = parseFloat(document.getElementById("horasTrabalhadas").value);
-  const categoriaFuncionario = parseInt(document.getElementById("categoriaFuncionario").value);
-  const turnoTrabalho = parseInt(document.getElementById("turnoTrabalho").value);
-  const avaliacaoGeral = parseInt(document.getElementById("avaliacaoGeral").value);
+function cadastrarFuncionario() {
+  // entrada
+  const salarioMinimo = parseFloat(document.getElementById("salarioMinimo").value);
+  const codigoFuncionario = document.getElementById("codigoFuncionario").value.trim();
+  const horasTrabalhadas = parseFloat(document.getElementById("horasTrabalhadas").value);
+  const categoriaFuncionario = document.getElementById("categoriaFuncionario").value;
+  const turnoTrabalho = document.getElementById("turnoTrabalho").value;
+  const avaliacaoGeral = parseFloat(document.getElementById("avaliacaoGeral").value);
+
+  // validação
+  if (isNaN(salarioMinimo) || salarioMinimo <= 0) {
+    alert("Informe um valor válido para o salário mínimo!");
+    return;
+  }
 
   const codigosFunExistentes = listaDeFuncionario.map(p => p.codigoFuncionario);
   if (!codigoFuncionario || codigosFunExistentes.includes(codigoFuncionario)) {
@@ -117,8 +128,76 @@ function cadastrarFuncionario(){
     return;
   }
 
-  if (isNaN(categoriaFuncionario) || categoriaFuncionario < 0 || categoriaFuncionario > 10) {
-    alert("Avaliação de desempenho mensal do funcionário inválida!");
+  if (isNaN(horasTrabalhadas) || horasTrabalhadas <= 0) {
+    alert("Informe uma quantidade de horas trabalhadas válida!");
     return;
   }
+
+  if (isNaN(avaliacaoGeral) || avaliacaoGeral < 0 || avaliacaoGeral > 10) {
+    alert("A avaliação de desempenho deve ser uma nota entre 0 e 10!");
+    return;
+  }
+
+  // cálculo
+  let percentualHora = 0;
+
+  if (categoriaFuncionario === 'F'){
+    if(turnoTrabalho === 'M') percentualHora = 0.10;
+    else if (turnoTrabalho === 'V') percentualHora = 0.15;
+    else if (turnoTrabalho === 'N') percentualHora = 0.20;
+  }
+  else if (categoriaFuncionario === 'G'){
+    if (turnoTrabalho === 'M') percentualHora = 0.30;
+    else if (turnoTrabalho === 'V') percentualHora = 0.35;
+    else if (turnoTrabalho === 'N') percentualHora = 0.40;
+  }
+
+  const valorHora = salarioMinimo * percentualHora;
+  const salarioInicial = horasTrabalhadas * valorHora;
+
+  let percentualAuxilio = 0;
+
+  if (salarioInicial <= 800) {
+    percentualAuxilio = 0.25;
+  } else if (salarioInicial <= 1200) {
+    percentualAuxilio = .20;
+  } else {
+    percentualAuxilio = 0.15;
+  }
+
+  const auxilioAlimentacao = salarioInicial * percentualAuxilio;
+
+  let percentualBonus = 0;
+  let tipoBonus = "";
+
+  if (avaliacaoGeral >= 9){
+    percentualBonus = 0.10;
+    tipoBonus = "10%";
+  } else if (avaliacaoGeral >= 7){
+    percentualBonus = 0.05;
+    tipoBonus = "5%";
+  } else if (avaliacaoGeral >= 2){
+    percentualBonus = 0.02;
+    tipoBonus = "2%"
+  } else {
+    percentualBonus = 0;
+    tipoBonus = "Nenhum"
+  }
+
+  const bonusDesempenho = salarioInicial * percentualBonus;
+
+  const salarioFinal = salarioInicial + auxilioAlimentacao + bonusDesempenho;
+
+
+  listaDeFuncionario.push({
+    codigoFuncionario,
+    categoriaFuncionario,
+    turnoTrabalho,
+    salarioFinal,
+    tipoBonus
+  });
+
+  alert(`Funcionário ${codigoFuncionario} cadastrado com sucesso!`);
+
+  document.getElementById("formFormulario").reset();
 }
