@@ -4,7 +4,7 @@ const listaDePedidos = [];
 function adicionarPedido() {
   // entrada
   const precoCombustivel = parseFloat(document.getElementById("precoCombustivel").value);
-  const codigo = document.getElementById("codigo").value.trim();
+  const codigo = parseInt(document.getElementById("codigo").value);
   const regiao = parseInt(document.getElementById("regiao").value);
   const distancia = parseFloat(document.getElementById("distancia").value);
   const qtdPecas = parseInt(document.getElementById("qtdPecas").value);
