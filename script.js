@@ -86,7 +86,7 @@ function gerarRelatorio() {
 
   const valorMedio = somaTotal / listaDePedidos.length;
 
-  const divResultado = document.getElementById("resultado");
+  const divResultado = document.getElementById("resultadoFrete");
   divResultado.innerHTML = `
     <h3>RELATÓRIO FINAL</h3>
     <p><strong>Número Total de Pedidos:</strong> ${listaDePedidos.length}</p>
@@ -105,7 +105,7 @@ function gerarRelatorio() {
 // --------------------------------------------------------------------------------------------
 
 // -- Exercício 2 – Sistema Avançado de Folha de Pagamento com Bônus de Desempenho e Relatório Mensal
-const listaDeFuncionario = []
+const listaDeFuncionario = [];
 
 function cadastrarFuncionario() {
   // entrada
@@ -160,7 +160,7 @@ function cadastrarFuncionario() {
   if (salarioInicial <= 800) {
     percentualAuxilio = 0.25;
   } else if (salarioInicial <= 1200) {
-    percentualAuxilio = .20;
+    percentualAuxilio = 0.20;
   } else {
     percentualAuxilio = 0.15;
   }
@@ -176,18 +176,16 @@ function cadastrarFuncionario() {
   } else if (avaliacaoGeral >= 7){
     percentualBonus = 0.05;
     tipoBonus = "5%";
-  } else if (avaliacaoGeral >= 2){
+  } else if (avaliacaoGeral >= 5){
     percentualBonus = 0.02;
-    tipoBonus = "2%"
+    tipoBonus = "2%";
   } else {
     percentualBonus = 0;
-    tipoBonus = "Nenhum"
+    tipoBonus = "Nenhum";
   }
 
   const bonusDesempenho = salarioInicial * percentualBonus;
-
   const salarioFinal = salarioInicial + auxilioAlimentacao + bonusDesempenho;
-
 
   listaDeFuncionario.push({
     codigoFuncionario,
@@ -250,7 +248,31 @@ function gerarRelatoriofuncionario(){
   }
   
   const mediaGeral = somaSalarioGeral / listaDeFuncionario.length;
-  
   const mediaOperacional = qtdOperacional > 0 ? (somaSalarioOperacional / qtdOperacional) : 0;
   const mediaGerente = qtdGerente > 0 ? (somaSalarioGerente / qtdGerente) : 0;
+  
+  const divResultado = document.getElementById("resultadoFuncionario");
+  divResultado.innerHTML = `
+    <h3>RELATÓRIO MENSAL DA FOLHA DE PAGAMENTO</h3>
+    <p><strong>Total de funcionários cadastrados:</strong> ${listaDeFuncionario.length}</p>
+    <p><strong>Média salarial geral:</strong> R$ ${mediaGeral.toFixed(2)}</p>
+    
+    <h4>Média Salarial por Categoria:</h4>
+    <ul>
+      <li><strong>Operacionais (F):</strong> R$ ${mediaOperacional.toFixed(2)}</li>
+      <li><strong>Gerentes (G):</strong> R$ ${mediaGerente.toFixed(2)}</li>
+    </ul>
+
+    <h4>Distribuição de Bônus de Desempenho:</h4>
+    <ul>
+      <li><strong>Bônus de 10%:</strong> ${qtdBonus10} funcionário(s)</li>
+      <li><strong>Bônus de 5%:</strong> ${qtdBonus5} funcionário(s)</li>
+      <li><strong>Bônus de 2%:</strong> ${qtdBonus2} funcionário(s)</li>
+      <li><strong>Sem bônus:</strong> ${qtdSemBonus} funcionário(s)</li>
+    </ul>
+
+    <h4>Salários</h4>
+    <p><strong>Maior Salário:</strong> Código ${maiorSalario.codigoFuncionario} | Categoria: ${maiorSalario.categoriaFuncionario} | Turno: ${maiorSalario.turnoTrabalho} | Valor: R$ ${maiorSalario.salarioFinal.toFixed(2)}</p>
+    <p><strong>Menor Salário:</strong> Código ${menorSalario.codigoFuncionario} | Categoria: ${menorSalario.categoriaFuncionario} | Turno: ${menorSalario.turnoTrabalho} | Valor: R$ ${menorSalario.salarioFinal.toFixed(2)}</p>
+  `;
 }
