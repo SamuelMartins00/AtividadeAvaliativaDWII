@@ -201,3 +201,56 @@ function cadastrarFuncionario() {
 
   document.getElementById("formFormulario").reset();
 }
+
+function gerarRelatoriofuncionario(){
+  if (listaDeFuncionario.length === 0){
+    alert("Nenhum funcionário foi cadastrado!");
+    return;
+  }
+
+  let somaSalarioGeral = 0;
+
+  let somaSalarioOperacional = 0;
+  let qtdOperacional = 0;
+
+  let somaSalarioGerente = 0;
+  let qtdGerente = 0;
+
+  let qtdBonus10 = 0;
+  let qtdBonus5 = 0;
+  let qtdBonus2 = 0;
+  let qtdSemBonus = 0;
+
+  let maiorSalario = listaDeFuncionario[0];
+  let menorSalario = listaDeFuncionario[0];
+
+  for (const f of listaDeFuncionario){
+    somaSalarioGeral += f.salarioFinal;
+
+    if(f.categoriaFuncionario === "F"){
+      somaSalarioOperacional += f.salarioFinal;
+      qtdOperacional++;
+    } else if (f.categoriaFuncionario === "G"){
+      somaSalarioGerente += f.salarioFinal;
+      qtdGerente++;
+    }
+
+    if (f.tipoBonus === "10%") qtdBonus10++;
+    else if (f.tipoBonus === "5%") qtdBonus5++;
+    else if (f.tipoBonus === "2%") qtdBonus2++;
+    else if (f.tipoBonus === "Nenhum") qtdSemBonus++;
+
+    if (f.salarioFinal > maiorSalario.salarioFinal){
+      maiorSalario = f;
+    }
+
+    if (f.salarioFinal < menorSalario.salarioFinal){
+      menorSalario = f;
+    }
+  }
+  
+  const mediaGeral = somaSalarioGeral / listaDeFuncionario.length;
+  
+  const mediaOperacional = qtdOperacional > 0 ? (somaSalarioOperacional / qtdOperacional) : 0;
+  const mediaGerente = qtdGerente > 0 ? (somaSalarioGerente / qtdGerente) : 0;
+}
