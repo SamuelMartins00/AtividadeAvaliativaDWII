@@ -425,3 +425,82 @@ function gerarRelatorioOrdem() {
     </ul>
   `;
 }
+// --------------------------------------------------------------------------------------------
+// Exercício 04 - Sistema de Reservas de Hotel com Tarifas Dinâmicas
+const listadeReservas = [];
+function cadastrarReserva(){
+  // entrada
+  const valorBaseDiaria = parseFloat(document.getElementById("valorBaseDiaria").value);
+  const valorBaseCafedaManha = parseFloat(document.getElementById("valorCafedaManha").value);
+  const codigoReserva = parseInt(document.getElementById("codigoreserva").value);
+  const tipoDeQuarto = parseInt(document.getElementById("tipoDeQuarto").value);
+  const temporada = parseInt(document.getElementById("temporada").value);
+  const qtdDiarias = parseInt(document.getElementById("qtdDiarias").value);
+  const qtdHospedes = parseInt(document.getElementById("qtdHospedes").value);
+  const temCafedaManhaincluso = document.getElementById("cafedaManhaInluso").checked;
+
+  // validação
+  const reservasExistentes = listadeReservas.map(p => p.codigoReserva);
+  if (!codigoReserva || reservasExistentes.includes(codigoReserva)) {
+    alert("Código de reserva inválido ou já cadastrado!");
+    return;
+  }
+
+  // calculo
+  let valorBaseDiariaAjustada = 0;
+  switch (tipoDeQuarto){
+    case 1: 
+      valorBaseDiariaAjustada = valorBaseDiaria;
+      break;
+    case 2:
+      valorBaseDiariaAjustada = valorBaseDiaria * 1.5;
+      break;
+    case 3:
+      valorBaseDiariaAjustada = valorBaseDiaria * 2;
+      break; 
+  }
+
+  let acrescimoReserva = 0;
+  switch (temporada){
+    case 1:
+      acrescimoReserva = 0;
+      break;
+    case 2:
+      acrescimoReserva = valorBaseDiariaAjustada * 0.25;
+      break;
+    case 3:
+      acrescimoReserva = valorBaseDiariaAjustada * 0.40;
+      break;
+    }
+
+    const valorTotalCafedaManha = temCafedaManhaincluso ? valorBaseCafedaManha * qtdHospedes * qtdDiarias : 0;
+    const valorTotalReserva = (valorBaseDiariaAjustada * qtdDiarias) + valorTotalCafedaManha;
+    
+    listadeReservas.push({
+      codigoReserva,
+      tipoDeQuarto,
+      temporada,
+      qtdDiarias,
+      qtdHospedes,
+      temCafedaManhaincluso
+    });
+
+    alert(`Reserva ${codigoReserva} cadastrada com sucesso!`);
+
+    document.getElementById("formReserva").reset();
+}
+
+function gerarRelatorioReserva(){
+  if (listadeReservas.length === 0){
+    alert("Nenhuma reserva foi cadastrada!");
+    return;
+  }
+
+  let valorMedioReserva = 0;
+  let totalQuartoStandard = 0;
+  let totalQuartoLuxo = 0;
+  let totalQuartoPremium = 0;
+  let temporadaBaixa = 0;
+  let temporadaAlta = 0;
+  let temporadaFeriado = 0;
+}
