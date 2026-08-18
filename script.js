@@ -276,3 +276,152 @@ function gerarRelatoriofuncionario(){
     <p><strong>Menor Salário:</strong> Código ${menorSalario.codigoFuncionario} | Categoria: ${menorSalario.categoriaFuncionario} | Turno: ${menorSalario.turnoTrabalho} | Valor: R$ ${menorSalario.salarioFinal.toFixed(2)}</p>
   `;
 }
+// --------------------------------------------------------------------------------------------
+// Exercício 3 – Sistema de Controle de Produção com Estoque e Relatórios
+const listaDeProdutos = [];
+
+function cadastrarOrdem() {
+  // entrada
+  const codigoOrdem = parseInt(document.getElementById("codigoOrdem").value);
+  const codigoProduto = parseInt(document.getElementById("codigoProduto").value);
+  const tipoProduto = parseInt(document.getElementById("tipoProduto").value); 
+  const qtdproduzida = parseInt(document.getElementById("qtdproduzida").value);
+  const custoUnitario = parseFloat(document.getElementById("custoUnitario").value);
+  const estoqueInicial = parseInt(document.getElementById("estoqueInicial").value);
+
+  // validação
+  if (isNaN(codigoOrdem)) {
+    alert("Código da ordem inválido!");
+    return;
+  }
+
+  const ordensExistentes = listaDeProdutos.map(p => p.codigoOrdem);
+  if (ordensExistentes.includes(codigoOrdem)) {
+    alert("Código da ordem já cadastrado!");
+    return;
+  }
+
+  // cálculo de estoque e alertas
+  const estoqueFinal = estoqueInicial + qtdproduzida;
+  let alertaAlto = false;
+  let alertaCritico = false;
+
+  if (estoqueFinal > 5000) {
+    alert("Estoque está alto!");
+    alertaAlto = true;
+  } else if (estoqueFinal < 500) {
+    alert("Estoque em estado crítico!");
+    alertaCritico = true;
+  }
+
+  let custoUnitarioAjustado = custoUnitario;
+  switch (tipoProduto) {
+    case 1: 
+      custoUnitarioAjustado = custoUnitario; 
+      break;
+    case 2: 
+      custoUnitarioAjustado = custoUnitario + (custoUnitario * 0.10); 
+      break;
+    case 3: 
+      custoUnitarioAjustado = custoUnitario + (custoUnitario * 0.20); 
+      break;
+    default:
+      alert("Tipo de produto inválido! Use 1 (Padrão), 2 (Premium) ou 3 (Sob Encomenda).");
+      return;
+  }
+  
+  const custoTotal = qtdproduzida * custoUnitarioAjustado;
+
+  listaDeProdutos.push({ 
+    codigoOrdem, 
+    codigoProduto, 
+    tipoProduto, 
+    custoUnitarioAjustado, 
+    estoqueFinal,
+    custoTotal,
+    alertaAlto,
+    alertaCritico
+  });
+
+  alert(`Ordem ${codigoOrdem} cadastrada com sucesso!`);
+
+  document.getElementById("formOrdem").reset(); 
+}
+
+function gerarRelatorioOrdem() {
+  if (listaDeProdutos.length === 0) {
+    alert("Nenhuma ordem foi cadastrada!");
+    return;
+  }
+
+  let estoquePadrao = 0;
+  let estoquePremium = 0;
+  let estoqueSobEncomenda = 0;
+
+  let somaCustoTotal = 0;
+  let qtdAlertaAlto = 0;
+  let qtdAlertaCritico = 0;
+
+  let ordemMaisCara = listaDeProdutos[0];
+  let ordemMaisBarata = listaDeProdutos[0];
+
+  const consolidadoProdutos = {};
+
+  for (const p of listaDeProdutos) {
+    if (p.tipoProduto === 1) estoquePadrao += p.estoqueFinal;
+    else if (p.tipoProduto === 2) estoquePremium += p.estoqueFinal;
+    else if (p.tipoProduto === 3) estoqueSobEncomenda += p.estoqueFinal;
+
+    somaCustoTotal += p.custoTotal;
+
+    if (p.custoTotal > ordemMaisCara.custoTotal) ordemMaisCara = p;
+    if (p.custoTotal < ordemMaisBarata.custoTotal) ordemMaisBarata = p;
+
+    if (p.alertaAlto) qtdAlertaAlto++;
+    if (p.alertaCritico) qtdAlertaCritico++;
+
+    if (!consolidadoProdutos[p.codigoProduto]) {
+      consolidadoProdutos[p.codigoProduto] = { estoque: 0, valorInvestido: 0 };
+    }
+
+    consolidadoProdutos[p.codigoProduto].estoque += p.estoqueFinal;
+    consolidadoProdutos[p.codigoProduto].valorInvestido += p.custoTotal;
+  }
+
+  const mediaCusto = somaCustoTotal / listaDeProdutos.length;
+
+  let htmlProdutosConsolidados = "";
+  for (const codProduto in consolidadoProdutos) {
+    const dados = consolidadoProdutos[codProduto];
+    htmlProdutosConsolidados += `<li><strong>Produto ${codProduto}:</strong> Estoque Final: ${dados.estoque} un. | Valor Investido: R$ ${dados.valorInvestido.toFixed(2)}</li>`;
+  }
+
+  const divResultado = document.getElementById("resultadoOrdem"); 
+  divResultado.innerHTML = `
+    <h3>RELATÓRIO FINAL - CONTROLE DE ESTOQUE</h3>
+    <p><strong>Total de Ordens Registradas:</strong> ${listaDeProdutos.length}</p>
+    <p><strong>Média de Custo Total por Ordem:</strong> R$ ${mediaCusto.toFixed(2)}</p>
+    
+    <h4>Estoque Total Final por Tipo de Produto:</h4>
+    <ul>
+      <li>Padrão (1): ${estoquePadrao} unidades</li>
+      <li>Premium (2): ${estoquePremium} unidades</li>
+      <li>Sob Encomenda (3): ${estoqueSobEncomenda} unidades</li>
+    </ul>
+
+    <h4>Alertas de Estoque:</h4>
+    <ul>
+      <li>Ordens com Estoque Alto (> 5000): ${qtdAlertaAlto}</li>
+      <li>Ordens com Estoque Crítico (< 500): ${qtdAlertaCritico}</li>
+    </ul>
+
+    <h4>Extremos de Custo:</h4>
+    <p><strong>Ordem Mais Cara:</strong> Código ${ordemMaisCara.codigoOrdem} (R$ ${ordemMaisCara.custoTotal.toFixed(2)})</p>
+    <p><strong>Ordem Mais Barata:</strong> Código ${ordemMaisBarata.codigoOrdem} (R$ ${ordemMaisBarata.custoTotal.toFixed(2)})</p>
+
+    <h4>Consolidação por Produto:</h4>
+    <ul>
+      ${htmlProdutosConsolidados}
+    </ul>
+  `;
+}
