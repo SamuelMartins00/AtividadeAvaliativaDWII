@@ -580,3 +580,59 @@ function gerarRelatorioReserva(){
     </ul>
   `;
 }
+
+// --------------------------------------------------------------------------------------------
+// Exercício 5 - Sistema de Treinos Esportivos com Carga e Risco de Lesão
+const listaDeTreinos = [];
+function cadastrarTreino() {
+  // entrada
+  const cargaMaximaSemanal = parseInt(document.getElementById("cargaMaximaSemanal").value);
+  const codigoTreino = parseInt(document.getElementById("codigoTreino").value);
+  const nomeJogador = document.getElementById("nomeJogador").value.trim(); // .trim() tira espaços em branco
+  const posicaoJogador = parseInt(document.getElementById("posicaoJogador").value);
+  const tipoTreino = parseInt(document.getElementById("tipoTreino").value);
+  const duracaoMin = parseFloat(document.getElementById("duracaoMin").value);
+  const intensidadeTreino = parseFloat(document.getElementById("intensidadeTreino").value);
+
+  // validação
+  const treinosExistentes = listaDeTreinos.map(p => p.codigoTreino);
+  if (!codigoTreino || treinosExistentes.includes(codigoTreino)) {
+    alert("Código de treino inválido ou já cadastrado!");
+    return;
+  }
+
+  if (isNaN(cargaMaximaSemanal) || cargaMaximaSemanal <= 0) {
+    alert("Informe um valor válido para a Carga Máxima Semanal");
+    return;
+  }
+
+  if (intensidadeTreino < 1 || intensidadeTreino > 10) {
+    alert("Intensidade de treino inválida! informe um valor entre 1 e 10");
+    return;
+  }
+
+  // cálculo da carga deste treino
+  let multiplicadorTipo = 0; 
+  switch (tipoTreino) {
+    case 1: multiplicadorTipo = 1.5; break;
+    case 2: multiplicadorTipo = 1.2; break;
+    case 3: multiplicadorTipo = 1; break;
+  }
+
+  // cálculo carga
+  let cargaDoTreino = (duracaoMin / 10) * intensidadeTreino * multiplicadorTipo;
+
+  listaDeTreinos.push({
+    codigoTreino,
+    nomeJogador,
+    posicaoJogador,
+    tipoTreino,
+    duracaoMin,
+    intensidadeTreino,
+    cargaDoTreino
+  });
+
+  alert(`Treino ${codigoTreino} cadastrado com sucesso! Jogador: ${nomeJogador}`);
+  
+  document.getElementById("formTreinos").reset();
+}
