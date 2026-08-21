@@ -121,6 +121,55 @@
 
   <h2>Relatório de Estoque</h2>
   <div id="resultadoOrdem"></div>
+  <hr>
+
+  <!-- ----------------------------------------------------------- -->
+  
+  <h2>Exercício 4</h2>
+  <label for="valorBaseDiaria">Valor Base da Diária Padrão (R$):</label>
+  <input type="number" step="0.01" id="valorBaseDiaria" min="0" placeholder="Ex: 150.00"><br><br>
+  
+  <label for="valorCafedaManha">Valor do Café da Manhã (por Hóspede/Dia) (R$):</label>
+  <input type="number" step="0.01" id="valorCafedaManha" min="0" placeholder="Ex: 35.00">
+
+  <h2>Cadastrar Reserva</h2>
+  <form id="formReserva">
+    <label for="codigoreserva">Código da Reserva:</label>
+    <input type="number" id="codigoreserva" required placeholder="Ex: 1001"><br><br>
+
+    <label for="tipoDeQuarto">Tipo de Quarto:</label>
+    <select id="tipoDeQuarto">
+      <option value="1">1 - Standard</option>
+      <option value="2">2 - Luxo</option>
+      <option value="3">3 - Premium</option>
+    </select><br><br>
+
+    <label for="temporada">Temporada:</label>
+    <select id="temporada">
+      <option value="1">1 - Baixa</option>
+      <option value="2">2 - Alta</option>
+      <option value="3">3 - Feriado</option>
+    </select><br><br>
+
+    <label for="qtdDiarias">Quantidade de Diárias:</label>
+    <input type="number" id="qtdDiarias" min="1" required placeholder="Ex: 5"><br><br>
+
+    <label for="qtdHospedes">Número de Hóspedes:</label>
+    <input type="number" id="qtdHospedes" min="1" required placeholder="Ex: 2"><br><br>
+
+    <label>
+      <input type="checkbox" id="cafedaManhaInluso"> Café da manhã incluso? 
+    </label><br><br>
+
+    <button type="button" onclick="cadastrarReserva()">Cadastrar Reserva</button>
+    <button type="button" onclick="gerarRelatorioReserva()">Gerar Relatório de Reservas</button>
+  </form>
+
+  <hr>
+
+  <h2>Relatório de Reservas</h2>
+  <div id="resultadoReserva"></div>
+  <br><br>
 
   <script src="script.js"></script>
 </body>

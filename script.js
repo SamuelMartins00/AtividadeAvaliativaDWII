@@ -446,10 +446,10 @@ function cadastrarReserva(){
     return;
   }
 
-  // calculo
+  // cálculo de multiplicador de quarto
   let valorBaseDiariaAjustada = 0;
   switch (tipoDeQuarto){
-    case 1: 
+    case 1:
       valorBaseDiariaAjustada = valorBaseDiaria;
       break;
     case 2:
@@ -460,6 +460,7 @@ function cadastrarReserva(){
       break; 
   }
 
+  // cálculo de multiplicador de temporada
   let acrescimoReserva = 0;
   switch (temporada){
     case 1:
@@ -471,23 +472,25 @@ function cadastrarReserva(){
     case 3:
       acrescimoReserva = valorBaseDiariaAjustada * 0.40;
       break;
-    }
-
-    const valorTotalCafedaManha = temCafedaManhaincluso ? valorBaseCafedaManha * qtdHospedes * qtdDiarias : 0;
-    const valorTotalReserva = (valorBaseDiariaAjustada * qtdDiarias) + valorTotalCafedaManha;
+  }
+  
+  const valorDiariaFinal = valorBaseDiariaAjustada + acrescimoReserva;
+  const valorTotalCafedaManha = temCafedaManhaincluso ? (valorBaseCafedaManha * qtdHospedes * qtdDiarias) : 0;
+  const valorTotalReserva = (valorDiariaFinal * qtdDiarias) + valorTotalCafedaManha;
     
-    listadeReservas.push({
-      codigoReserva,
-      tipoDeQuarto,
-      temporada,
-      qtdDiarias,
-      qtdHospedes,
-      temCafedaManhaincluso
+  listadeReservas.push({
+    codigoReserva,
+    tipoDeQuarto,
+    temporada,
+    qtdDiarias,
+    qtdHospedes,
+    temCafedaManhaincluso,
+    valorTotalReserva 
     });
 
-    alert(`Reserva ${codigoReserva} cadastrada com sucesso!`);
-
-    document.getElementById("formReserva").reset();
+  alert(`Reserva ${codigoReserva} cadastrada com sucesso!`);
+  
+  document.getElementById("formReserva").reset();
 }
 
 function gerarRelatorioReserva(){
@@ -496,11 +499,84 @@ function gerarRelatorioReserva(){
     return;
   }
 
-  let valorMedioReserva = 0;
+  // Variáveis 
+  let valorTotalTodasReservas = 0;
   let totalQuartoStandard = 0;
   let totalQuartoLuxo = 0;
   let totalQuartoPremium = 0;
   let temporadaBaixa = 0;
   let temporadaAlta = 0;
   let temporadaFeriado = 0;
+  
+  let reservaMaisCara = listadeReservas[0];
+  let reservaMaisBarata = listadeReservas[0];
+  
+  let reservasComCafe = 0;
+  let reservasSemCafe = 0;
+  
+  let ocupacaoTotal = 0; // (diárias × hóspedes)
+  let totalHospedes = 0;
+
+  
+  for (let reserva of listadeReservas) {
+    const valor = reserva.valorTotalReserva;
+    valorTotalTodasReservas += valor;
+
+    if (reserva.tipoDeQuarto === 1) totalQuartoStandard += valor;
+    else if (reserva.tipoDeQuarto === 2) totalQuartoLuxo += valor;
+    else if (reserva.tipoDeQuarto === 3) totalQuartoPremium += valor;
+
+    if (reserva.temporada === 1) temporadaBaixa += valor;
+    else if (reserva.temporada === 2) temporadaAlta += valor;
+    else if (reserva.temporada === 3) temporadaFeriado += valor;
+
+    if (reserva.temCafedaManhaincluso) reservasComCafe++;
+    else reservasSemCafe++;
+
+    ocupacaoTotal += (reserva.qtdDiarias * reserva.qtdHospedes);
+    totalHospedes += reserva.qtdHospedes;
+
+    if (valor > reservaMaisCara.valorTotalReserva) {
+      reservaMaisCara = reserva;
+    }
+    if (valor < reservaMaisBarata.valorTotalReserva) {
+      reservaMaisBarata = reserva;
+    }
+  }
+
+  const valorMedioReserva = valorTotalTodasReservas / listadeReservas.length;
+  const valorMedioHospede = totalHospedes > 0 ? (valorTotalTodasReservas / totalHospedes) : 0;
+
+  const divResultado = document.getElementById("resultadoReserva"); 
+  divResultado.innerHTML =`
+    <h3>RELATÓRIO FINAL - SISTEMA DE RESERVAS</h3>
+    <p><strong>Total de Reservas Registradas:</strong> ${listadeReservas.length}</p>
+    <p><strong>Média de Valor por Reserva:</strong> R$ ${valorMedioReserva.toFixed(2)}</p>
+    
+    <h4>Faturamento por Tipo de Quarto:</h4>
+    <ul>
+      <li>Standard (1): R$ ${totalQuartoStandard.toFixed(2)}</li>
+      <li>Luxo (2): R$ ${totalQuartoLuxo.toFixed(2)}</li>
+      <li>Premium (3): R$ ${totalQuartoPremium.toFixed(2)}</li>
+    </ul>
+
+    <h4>Faturamento por Temporada:</h4>
+    <ul>
+      <li>Baixa (1): R$ ${temporadaBaixa.toFixed(2)}</li>
+      <li>Alta (2): R$ ${temporadaAlta.toFixed(2)}</li>
+      <li>Feriado (3): R$ ${temporadaFeriado.toFixed(2)}</li>
+    </ul>
+
+    <h4>Extremos de Faturamento:</h4>
+    <p><strong>Reserva Mais Cara:</strong> Código ${reservaMaisCara.codigoReserva} (R$ ${reservaMaisCara.valorTotalReserva.toFixed(2)})</p>
+    <p><strong>Reserva Mais Barata:</strong> Código ${reservaMaisBarata.codigoReserva} (R$ ${reservaMaisBarata.valorTotalReserva.toFixed(2)})</p>
+
+    <h4>Estatísticas Adicionais:</h4>
+    <ul>
+      <li>Reservas com Café da Manhã Incluso: ${reservasComCafe}</li>
+      <li>Reservas sem Café da Manhã: ${reservasSemCafe}</li>
+      <li>Ocupação Total (diárias x hóspedes): ${ocupacaoTotal}</li>
+      <li>Valor Médio por Hóspede: R$ ${valorMedioHospede.toFixed(2)}</li>
+    </ul>
+  `;
 }
