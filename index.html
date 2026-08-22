@@ -169,6 +169,52 @@
 
   <h2>Relatório de Reservas</h2>
   <div id="resultadoReserva"></div>
+  
+  <hr>
+
+  <!-- --------------------------------------------------------------- -->
+  <!-- execício 5 -->
+  <h2>Exercício 5 - Treinos Esportivos</h2>
+
+  <label for="cargaMaximaSemanal">Carga Máxima Semanal (pts):</label>
+  <input type="number" id="cargaMaximaSemanal" min="1" placeholder="Ex: 300"><br><br>
+
+  <form id="formTreinos">
+    <label for="codigoTreino">Código do Treino:</label>
+    <input type="number" id="codigoTreino" required placeholder="Ex: 10"><br><br>
+
+    <label for="nomeJogador">Nome do Jogador:</label>
+    <input type="text" id="nomeJogador" required placeholder="Ex: João"><br><br>
+
+    <label for="posicaoJogador">Posição:</label>
+    <select id="posicaoJogador">
+      <option value="1">1 - Goleiro</option>
+      <option value="2">2 - Zagueiro</option>
+      <option value="3">3 - Meio-campo</option>
+      <option value="4">4 - Atacante</option>
+    </select><br><br>
+
+    <label for="tipoTreino">Tipo de Treino:</label>
+    <select id="tipoTreino">
+      <option value="1">1 - Físico</option>
+      <option value="2">2 - Técnico</option>
+      <option value="3">3 - Estratégico</option>
+    </select><br><br>
+
+    <label for="duracaoMin">Duração (minutos):</label>
+    <input type="number" id="duracaoMin" min="1" required placeholder="Ex: 90"><br><br>
+
+    <label for="intensidadeTreino">Intensidade (1 a 10):</label>
+    <input type="number" id="intensidadeTreino" min="1" max="10" required placeholder="Ex: 8"><br><br>
+
+    <button type="button" onclick="cadastrarTreino()">Cadastrar Treino</button>
+    <button type="button" onclick="gerarRelatorioTreinos()">Gerar Relatório de Treinos</button>
+  </form>
+
+  <br>
+  <h2>Relatório de Treinos</h2>
+  <div id="resultadoTreinos"></div>
+
   <br><br>
 
   <script src="script.js"></script>

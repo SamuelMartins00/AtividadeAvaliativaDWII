@@ -582,13 +582,14 @@ function gerarRelatorioReserva(){
 }
 
 // --------------------------------------------------------------------------------------------
+// --------------------------------------------------------------------------------------------
 // Exercício 5 - Sistema de Treinos Esportivos com Carga e Risco de Lesão
 const listaDeTreinos = [];
 function cadastrarTreino() {
   // entrada
   const cargaMaximaSemanal = parseInt(document.getElementById("cargaMaximaSemanal").value);
   const codigoTreino = parseInt(document.getElementById("codigoTreino").value);
-  const nomeJogador = document.getElementById("nomeJogador").value.trim(); // .trim() tira espaços em branco
+  const nomeJogador = document.getElementById("nomeJogador").value.trim();
   const posicaoJogador = parseInt(document.getElementById("posicaoJogador").value);
   const tipoTreino = parseInt(document.getElementById("tipoTreino").value);
   const duracaoMin = parseFloat(document.getElementById("duracaoMin").value);
@@ -611,21 +612,42 @@ function cadastrarTreino() {
     return;
   }
 
-  // cálculo da carga deste treino
-  let multiplicadorTipo = 0; 
-  switch (tipoTreino) {
-    case 1: multiplicadorTipo = 1.5; break;
-    case 2: multiplicadorTipo = 1.2; break;
-    case 3: multiplicadorTipo = 1; break;
+  let nomePosicao = "";
+  switch (posicaoJogador) {
+    case 1: 
+      nomePosicao = "Goleiro"; 
+      break;
+    case 2: 
+      nomePosicao = "Zagueiro"; 
+      break;
+    case 3: 
+      nomePosicao = "Meio-campo";   
+      break;
+    case 4: 
+      nomePosicao = "Atacante";
+      break;
   }
 
-  // cálculo carga
+  // cálculo da carga
+  let multiplicadorTipo = 0; 
+  switch (tipoTreino) {
+    case 1: 
+      multiplicadorTipo = 1.5; 
+      break; 
+    case 2: 
+      multiplicadorTipo = 1.2; 
+      break; 
+    case 3: 
+      multiplicadorTipo = 1;
+      break;  
+  }
+
   let cargaDoTreino = (duracaoMin / 10) * intensidadeTreino * multiplicadorTipo;
 
   listaDeTreinos.push({
     codigoTreino,
     nomeJogador,
-    posicaoJogador,
+    posicaoJogador: nomePosicao,
     tipoTreino,
     duracaoMin,
     intensidadeTreino,
@@ -635,4 +657,121 @@ function cadastrarTreino() {
   alert(`Treino ${codigoTreino} cadastrado com sucesso! Jogador: ${nomeJogador}`);
   
   document.getElementById("formTreinos").reset();
+}
+
+function gerarRelatorioTreinos() {
+  if (listaDeTreinos.length === 0) {
+    alert("Nenhum treino foi cadastrado!");
+    return;
+  }
+
+  const cargaMaximaSemanal = parseInt(document.getElementById("cargaMaximaSemanal").value);
+
+  let cargaFisico = 0;
+  let qtdFisico = 0;
+  let cargaTecnico = 0; 
+  let qtdTecnico = 0;
+  let cargaEstrategico = 0;
+  let qtdEstrategico = 0;
+
+  let cargaGoleiro = 0;
+  let qtdGoleiro = 0;
+  let cargaZagueiro = 0;
+  let qtdZagueiro = 0;
+  let cargaMeioCampo = 0;
+  let qtdMeioCampo = 0;
+  let cargaAtacante = 0;
+  let qtdAtacante = 0;
+
+  let resumoJogadores = {};
+
+  for (let treino of listaDeTreinos) {
+    const nome = treino.nomeJogador;
+    if (!resumoJogadores[nome]) {
+      resumoJogadores[nome] = { cargaTotal: 0, qtdTreinos: 0, posicao: treino.posicaoJogador };
+    }
+    resumoJogadores[nome].cargaTotal += treino.cargaDoTreino;
+    resumoJogadores[nome].qtdTreinos++;
+
+    if (treino.tipoTreino === 1) { cargaFisico += treino.cargaDoTreino; qtdFisico++; }
+    else if (treino.tipoTreino === 2) { cargaTecnico += treino.cargaDoTreino; qtdTecnico++; }
+    else if (treino.tipoTreino === 3) { cargaEstrategico += treino.cargaDoTreino; qtdEstrategico++; }
+
+    if (treino.posicaoJogador === "Goleiro") { cargaGoleiro += treino.cargaDoTreino; qtdGoleiro++; }
+    else if (treino.posicaoJogador === "Zagueiro") { cargaZagueiro += treino.cargaDoTreino; qtdZagueiro++; }
+    else if (treino.posicaoJogador === "Meio-campo") { cargaMeioCampo += treino.cargaDoTreino; qtdMeioCampo++; }
+    else if (treino.posicaoJogador === "Atacante") { cargaAtacante += treino.cargaDoTreino; qtdAtacante++; }
+  }
+
+  const nomesDosJogadores = Object.keys(resumoJogadores);
+  const primeiroNome = nomesDosJogadores[0];
+
+  let nomeMaiorCarga = primeiroNome;
+  let maiorCarga = resumoJogadores[primeiroNome].cargaTotal;
+  
+  let nomeMenorCarga = primeiroNome;
+  let menorCarga = resumoJogadores[primeiroNome].cargaTotal;
+  
+  let qtdRiscoLesao = 0;
+  let htmlListaJogadores = "";
+
+  for (let nome in resumoJogadores) {
+    let dados = resumoJogadores[nome];
+
+    if (dados.cargaTotal > cargaMaximaSemanal) {
+      qtdRiscoLesao++;
+    }
+
+    if (dados.cargaTotal > maiorCarga) {
+      maiorCarga = dados.cargaTotal;
+      nomeMaiorCarga = nome;
+    }
+
+    if (dados.cargaTotal < menorCarga) {
+      menorCarga = dados.cargaTotal;
+      nomeMenorCarga = nome;
+    }
+
+    htmlListaJogadores += `<li>${nome} (${dados.posicao}) - Carga: ${dados.cargaTotal.toFixed(1)} | Treinos: ${dados.qtdTreinos}</li>`;
+  }
+
+  const mediaFisico = qtdFisico > 0 ? (cargaFisico / qtdFisico) : 0;
+  const mediaTecnico = qtdTecnico > 0 ? (cargaTecnico / qtdTecnico) : 0;
+  const mediaEstrategico = qtdEstrategico > 0 ? (cargaEstrategico / qtdEstrategico) : 0;
+
+  const mediaGoleiro = qtdGoleiro > 0 ? (cargaGoleiro / qtdGoleiro) : 0;
+  const mediaZagueiro = qtdZagueiro > 0 ? (cargaZagueiro / qtdZagueiro) : 0;
+  const mediaMeioCampo = qtdMeioCampo > 0 ? (cargaMeioCampo / qtdMeioCampo) : 0;
+  const mediaAtacante = qtdAtacante > 0 ? (cargaAtacante / qtdAtacante) : 0;
+
+  const divResultado = document.getElementById("resultadoTreinos");
+  divResultado.innerHTML = `
+    <h3>RELATÓRIO DE DESEMPENHO E SAÚDE</h3>
+    <p><strong>Total de Treinos Cadastrados:</strong> ${listaDeTreinos.length}</p>
+    <p><strong>Jogadores em Risco de Lesão:</strong> ${qtdRiscoLesao}</p>
+
+    <h4>Resumo por Jogador:</h4>
+    <ul>
+      ${htmlListaJogadores}
+    </ul>
+
+    <h4>Extremos da Semana:</h4>
+    <p><strong>Maior Carga:</strong> ${nomeMaiorCarga} (${maiorCarga.toFixed(1)} pts)</p>
+    <p><strong>Menor Carga:</strong> ${nomeMenorCarga} (${menorCarga.toFixed(1)} pts)</p>
+
+    <h4>Carga Média por Tipo de Treino:</h4>
+    <ul>
+      <li>Físico (1): ${mediaFisico.toFixed(1)} pts</li>
+      <li>Técnico (2): ${mediaTecnico.toFixed(1)} pts</li>
+      <li>Estratégico (3): ${mediaEstrategico.toFixed(1)} pts</li>
+    </ul>
+
+    <h4>Desempenho por Posição (Total de Treinos | Carga Média):</h4>
+    <ul>
+      <li><strong>Goleiro:</strong> ${qtdGoleiro} treino(s) | Média: ${mediaGoleiro.toFixed(1)} pts</li>
+      <li><strong>Zagueiro:</strong> ${qtdZagueiro} treino(s) | Média: ${mediaZagueiro.toFixed(1)} pts</li>
+      <li><strong>Meio-campo:</strong> ${qtdMeioCampo} treino(s) | Média: ${mediaMeioCampo.toFixed(1)} pts</li>
+      <li><strong>Atacante:</strong> ${qtdAtacante} treino(s) | Média: ${mediaAtacante.toFixed(1)} pts</li>
+    </ul>
+  `;
 }
