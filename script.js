@@ -884,7 +884,7 @@ function gerarRelatorioVendas() {
 
     if (v.tipoCliente === 'PF') totalVendidoPF += v.valorVenda;
     else if (v.tipoCliente === 'PJ') totalVendidoPJ += v.valorVenda;
-r
+
     if (!consolidadoVendedores[v.codigoVendedor]) {
       consolidadoVendedores[v.codigoVendedor] = { totalVendas: 0, totalComissao: 0 };
     }

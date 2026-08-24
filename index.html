@@ -2,50 +2,82 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Atividade Avaliativa DW2</title>
-  <link rel="stylesheet" href="style.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: '#2563eb', // Azul
+            brandHover: '#1d4ed8'
+          }
+        }
+      }
+    }
+  </script>
+
 </head>
-<body>
+<body class="bg-gray-100 text-gray-800 font-sans p-4 md:p-8">
 
-<!-- ----------------------------------------------------------- -->
-  <h2>Exercício 1</h2>
-  <label for="precoCombustivel">Preço do Combustível (R$):</label>
-  <input type="number" step="0.01" id="precoCombustivel" min="0" placeholder="Ex: 6,53">
+  <div class="max-w-5xl mx-auto space-y-8">
+    
+    <!-- Cabeçalho -->
+    <header class="text-center mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Atividade Avaliativa DWII</h1>
+    </header>
 
-  <hr>
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 1 – Frete com múltiplos pedidos e relatório final -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 1 - Sistema de Fretes</h2>
+      
+      <div class="mb-6 bg-blue-50 p-4 rounded-lg">
+        <label for="precoCombustivel" class="block text-sm font-semibold text-blue-900 mb-1">Preço do Combustível Base (R$):</label>
+        <input type="number" step="0.01" id="precoCombustivel" min="0" placeholder="Ex: 6,53" class="w-full md:w-1/3 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+      </div>
 
-  <h2>Cadastrar Pedido</h2>
-  <form id="formPedido">
-    <label>Código do Pedido:</label>
-    <input type="text" id="codigo" required placeholder="Ex: PED-1"><br><br>
+      <h3 class="font-semibold text-gray-700 mb-4">Cadastrar Novo Pedido</h3>
+      <form id="formPedido" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Código do Pedido:</label>
+          <input type="text" id="codigo" required placeholder="Ex: 101" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Região:</label>
+          <select id="regiao" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Sudeste</option>
+            <option value="2">2 - Sul</option>
+            <option value="3">3 - Centro-Oeste</option>
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm text-gray-600 mb-1">Distância (km):</label>
+          <input type="number" id="distancia" required placeholder="Ex: 20" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="qtdPecas" class="block text-sm text-gray-600 mb-1">Quantidade de Peças:</label>
+          <input type="number" id="qtdPecas" required placeholder="Ex: 1200" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div class="md:col-span-2 flex items-center mt-2">
+          <input type="checkbox" id="temRastreamento" class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+          <label for="temRastreamento" class="ml-2 text-sm font-medium text-gray-700">Deseja rastreamento?</label>
+        </div>
+        
+        <div class="md:col-span-2 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="adicionarPedido()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Adicionar Pedido</button>
+          <button type="button" onclick="gerarRelatorio()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-    <label>Região:</label>
-    <select id="regiao">
-      <option value="1">1 - Sudeste</option>
-      <option value="2">2 - Sul</option>
-      <option value="3">3 - Centro-Oeste</option>
-    </select><br><br>
-
-    <label>Distância (km):</label>
-    <input type="number" id="distancia" required placeholder="Ex: 20"><br><br>
-
-    <label for="qtdPecas">Quantidade de Peças:</label>
-    <input type="number" id="qtdPecas" required placeholder="Ex: 1200"><br><br>
-
-    <label>
-      <input type="checkbox" id="temRastreamento"> Deseja rastreamento? 
-    </label><br><br>
-
-    <button type="button" onclick="adicionarPedido()">Adicionar Pedido</button>
-    <button type="button" onclick="gerarRelatorio()">Gerar Relatório de Pedidos</button>
-  </form>
-
-  <hr>
-
-  <h2>Relatório de Pedidos</h2>
-  <div id="resultadoFrete"></div>
-  <hr>
-
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Pedidos</h3>
+        <div id="resultadoFrete" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
   <!-- ----------------------------------------------------------- -->
 
   <h2>Exercício 2</h2>
