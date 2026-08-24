@@ -78,220 +78,297 @@
         <div id="resultadoFrete" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
       </div>
     </section>
-  <!-- ----------------------------------------------------------- -->
 
-  <h2>Exercício 2</h2>
-    <label for="salarioMinimo">Valor do Salário Mínimo (R$):</label>
-  <input type="number" step="0.01" id="salarioMinimo" min="0" placeholder="Ex: 1412.00">
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 2 – Sistema Avançado de Folha de Pagamento com Bônus de Desempenho e Relatório Mensal -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 2 - Folha de Pagamento</h2>
+      
+      <div class="mb-6 bg-blue-50 p-4 rounded-lg">
+        <label for="salarioMinimo" class="block text-sm font-semibold text-blue-900 mb-1">Valor do Salário Mínimo (R$):</label>
+        <input type="number" step="0.01" id="salarioMinimo" min="0" placeholder="Ex: 1412.00" class="w-full md:w-1/3 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+      </div>
 
-  <h2>Cadastrar Funcionário</h2>
-  <form id="formFormulario">
-    <label for="codigoFuncionario">Código do Funcionário:</label>
-    <input type="text" id="codigoFuncionario" required placeholder="Ex: 101"><br><br>
+      <h3 class="font-semibold text-gray-700 mb-4">Cadastrar Funcionário</h3>
+      <form id="formFormulario" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="codigoFuncionario" class="block text-sm text-gray-600 mb-1">Código do Funcionário:</label>
+          <input type="text" id="codigoFuncionario" required placeholder="Ex: 101" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="horasTrabalhadas" class="block text-sm text-gray-600 mb-1">Horas Trabalhadas no Mês:</label>
+          <input type="number" id="horasTrabalhadas" min="0" required placeholder="Ex: 220" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="categoriaFuncionario" class="block text-sm text-gray-600 mb-1">Categoria:</label>
+          <select id="categoriaFuncionario" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="F">F - Funcionário Operacional</option>
+            <option value="G">G - Gerente</option>
+          </select>
+        </div>
+        <div>
+          <label for="turnoTrabalho" class="block text-sm text-gray-600 mb-1">Turno de Trabalho:</label>
+          <select id="turnoTrabalho" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="M">M - Matutino</option>
+            <option value="V">V - Vespertino</option>
+            <option value="N">N - Noturno</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label for="avaliacaoGeral" class="block text-sm text-gray-600 mb-1">Avaliação de Desempenho (0 a 10):</label>
+          <input type="number" step="0.01" id="avaliacaoGeral" min="0" max="10" required placeholder="Ex: 9.3" class="w-full md:w-1/2 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        
+        <div class="md:col-span-2 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="cadastrarFuncionario()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Cadastrar Funcionário</button>
+          <button type="button" onclick="gerarRelatoriofuncionario()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-    <label for="horasTrabalhadas">Horas Trabalhadas no Mês:</label>
-    <input type="number" id="horasTrabalhadas" min="0" required placeholder="Ex: 220"><br><br>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Funcionários</h3>
+        <div id="resultadoFuncionario" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
 
-    <label for="categoriaFuncionario">Categoria:</label>
-    <select id="categoriaFuncionario">
-      <option value="F">F - Funcionário Operacional</option>
-      <option value="G">G - Gerente</option>
-    </select><br><br>
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 3 - Sistema de Controle de Produção com Estoque e Relatórios -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 3 - Estoque e Produção</h2>
+      
+      <h3 class="font-semibold text-gray-700 mb-4">Cadastrar Ordem de Produção</h3>
+      <form id="formOrdem" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="codigoOrdem" class="block text-sm text-gray-600 mb-1">Código da Ordem:</label>
+          <input type="number" id="codigoOrdem" required placeholder="Ex: 501" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="codigoProduto" class="block text-sm text-gray-600 mb-1">Código do Produto:</label>
+          <input type="number" id="codigoProduto" required placeholder="Ex: 10" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="tipoProduto" class="block text-sm text-gray-600 mb-1">Tipo de Produto:</label>
+          <select id="tipoProduto" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Padrão</option>
+            <option value="2">2 - Premium</option>
+            <option value="3">3 - Sob Encomenda</option>
+          </select>
+        </div>
+        <div>
+          <label for="qtdproduzida" class="block text-sm text-gray-600 mb-1">Qtd. Produzida:</label>
+          <input type="number" id="qtdproduzida" min="0" required placeholder="Ex: 1500" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="custoUnitario" class="block text-sm text-gray-600 mb-1">Custo Unitário (R$):</label>
+          <input type="number" step="0.01" id="custoUnitario" min="0" required placeholder="Ex: 25.50" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="estoqueInicial" class="block text-sm text-gray-600 mb-1">Estoque Inicial:</label>
+          <input type="number" id="estoqueInicial" min="0" required placeholder="Ex: 200" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        
+        <div class="md:col-span-3 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="cadastrarOrdem()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Cadastrar Ordem</button>
+          <button type="button" onclick="gerarRelatorioOrdem()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-    <label for="turnoTrabalho">Turno de Trabalho:</label>
-    <select id="turnoTrabalho">
-      <option value="M">M - Matutino</option>
-      <option value="V">V - Vespertino</option>
-      <option value="N">N - Noturno</option>
-    </select><br><br>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Estoque</h3>
+        <div id="resultadoOrdem" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
 
-    <label for="avaliacaoGeral">Avaliação de Desempenho (0 a 10):</label>
-    <input type="number" step="0.01" id="avaliacaoGeral" min="0" max="10" required placeholder="Ex: 9,3"><br><br>
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 04 - Sistema de Reservas de Hotel com Tarifas Dinâmicas -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 4 - Reservas de Hotel</h2>
+      
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50 p-4 rounded-lg">
+        <div>
+          <label for="valorBaseDiaria" class="block text-sm font-semibold text-blue-900 mb-1">Valor Base Diária Padrão (R$):</label>
+          <input type="number" step="0.01" id="valorBaseDiaria" min="0" placeholder="Ex: 150.00" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="valorCafedaManha" class="block text-sm font-semibold text-blue-900 mb-1">Café da Manhã (por Hóspede/Dia) (R$):</label>
+          <input type="number" step="0.01" id="valorCafedaManha" min="0" placeholder="Ex: 35.00" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+      </div>
 
-    <button type="button" onclick="cadastrarFuncionario()">Cadastrar Funcionário</button>
-    <button type="button" onclick="gerarRelatoriofuncionario()">Gerar Relatório de Funcionários</button>
-  </form>
+      <h3 class="font-semibold text-gray-700 mb-4">Cadastrar Reserva</h3>
+      <form id="formReserva" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <label for="codigoreserva" class="block text-sm text-gray-600 mb-1">Código da Reserva:</label>
+          <input type="number" id="codigoreserva" required placeholder="Ex: 1001" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="tipoDeQuarto" class="block text-sm text-gray-600 mb-1">Tipo de Quarto:</label>
+          <select id="tipoDeQuarto" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Standard</option>
+            <option value="2">2 - Luxo</option>
+            <option value="3">3 - Premium</option>
+          </select>
+        </div>
+        <div>
+          <label for="temporada" class="block text-sm text-gray-600 mb-1">Temporada:</label>
+          <select id="temporada" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Baixa</option>
+            <option value="2">2 - Alta</option>
+            <option value="3">3 - Feriado</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-4">
+          <div>
+            <label for="qtdDiarias" class="block text-sm text-gray-600 mb-1">Diárias:</label>
+            <input type="number" id="qtdDiarias" min="1" required placeholder="Ex: 5" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+          </div>
+          <div>
+            <label for="qtdHospedes" class="block text-sm text-gray-600 mb-1">Hóspedes:</label>
+            <input type="number" id="qtdHospedes" min="1" required placeholder="Ex: 2" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+          </div>
+        </div>
+        <div class="md:col-span-2 flex items-center mt-2">
+          <input type="checkbox" id="cafedaManhaInluso" class="w-4 h-4 text-brand bg-gray-100 border-gray-300 rounded focus:ring-brand">
+          <label for="cafedaManhaInluso" class="ml-2 text-sm font-medium text-gray-700">Café da manhã incluso?</label>
+        </div>
+        
+        <div class="md:col-span-2 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="cadastrarReserva()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Cadastrar Reserva</button>
+          <button type="button" onclick="gerarRelatorioReserva()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-  <hr>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Reservas</h3>
+        <div id="resultadoReserva" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
 
-  <h2>Relatório de Funcionários</h2>
-  <div id="resultadoFuncionario"></div>
-  <hr>
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 5 - Sistema de Treinos Esportivos com Carga e Risco de Lesão -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 5 - Treinos Esportivos</h2>
+      
+      <div class="mb-6 bg-blue-50 p-4 rounded-lg">
+        <label for="cargaMaximaSemanal" class="block text-sm font-semibold text-blue-900 mb-1">Carga Máxima Semanal (pts):</label>
+        <input type="number" id="cargaMaximaSemanal" min="1" placeholder="Ex: 300" class="w-full md:w-1/3 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+      </div>
 
-  <!-- ----------------------------------------------------------- -->
+      <h3 class="font-semibold text-gray-700 mb-4">Cadastrar Treino</h3>
+      <form id="formTreinos" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="codigoTreino" class="block text-sm text-gray-600 mb-1">Código do Treino:</label>
+          <input type="number" id="codigoTreino" required placeholder="Ex: 10" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div class="md:col-span-2">
+          <label for="nomeJogador" class="block text-sm text-gray-600 mb-1">Nome do Jogador:</label>
+          <input type="text" id="nomeJogador" required placeholder="Ex: João" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="posicaoJogador" class="block text-sm text-gray-600 mb-1">Posição:</label>
+          <select id="posicaoJogador" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Goleiro</option>
+            <option value="2">2 - Zagueiro</option>
+            <option value="3">3 - Meio-campo</option>
+            <option value="4">4 - Atacante</option>
+          </select>
+        </div>
+        <div>
+          <label for="tipoTreino" class="block text-sm text-gray-600 mb-1">Tipo de Treino:</label>
+          <select id="tipoTreino" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Físico</option>
+            <option value="2">2 - Técnico</option>
+            <option value="3">3 - Estratégico</option>
+          </select>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label for="duracaoMin" class="block text-sm text-gray-600 mb-1">Minutos:</label>
+            <input type="number" id="duracaoMin" min="1" required placeholder="Ex: 90" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+          </div>
+          <div>
+            <label for="intensidadeTreino" class="block text-sm text-gray-600 mb-1">Intens. (1 a 10):</label>
+            <input type="number" id="intensidadeTreino" min="1" max="10" required placeholder="Ex: 8" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+          </div>
+        </div>
+        
+        <div class="md:col-span-3 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="cadastrarTreino()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Cadastrar Treino</button>
+          <button type="button" onclick="gerarRelatorioTreinos()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-  <h2>Exercício 3</h2>
-  <h2>Cadastrar Ordem de Produção</h2>
-  <form id="formOrdem">
-    <label for="codigoOrdem">Código da Ordem:</label>
-    <input type="number" id="codigoOrdem" required placeholder="Ex: 501"><br><br>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Treinos</h3>
+        <div id="resultadoTreinos" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
 
-    <label for="codigoProduto">Código do Produto:</label>
-    <input type="number" id="codigoProduto" required placeholder="Ex: 10"><br><br>
+    <!-- ----------------------------------------------------------- -->
+    <!-- Exercício 6 - Sistema de Vendas com Comissões, Metas e Performance -->
+    <!-- ----------------------------------------------------------- -->
+    <section class="bg-white p-6 rounded-xl shadow-sm border border-gray-200">
+      <h2 class="text-xl font-bold text-brand border-b pb-2 mb-4">Exercício 6 - Sistema de Vendas</h2>
+      
+      <div class="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 bg-blue-50 p-4 rounded-lg">
+        <div>
+          <label for="metaMensalVendas" class="block text-sm font-semibold text-blue-900 mb-1">Meta Mensal (R$):</label>
+          <input type="number" step="0.01" id="metaMensalVendas" min="0" placeholder="Ex: 10000.00" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="percentualBaseComissao" class="block text-sm font-semibold text-blue-900 mb-1">Percentual Base (%):</label>
+          <input type="number" step="0.01" id="percentualBaseComissao" min="0" placeholder="Ex: 5" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+      </div>
 
-    <label for="tipoProduto">Tipo de Produto:</label>
-    <select id="tipoProduto">
-      <option value="1">1 - Padrão</option>
-      <option value="2">2 - Premium</option>
-      <option value="3">3 - Sob Encomenda</option>
-    </select><br><br>
+      <h3 class="font-semibold text-gray-700 mb-4">Registrar Venda</h3>
+      <form id="formVendas" class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <div>
+          <label for="codigoVenda" class="block text-sm text-gray-600 mb-1">Código da Venda:</label>
+          <input type="number" id="codigoVenda" required placeholder="Ex: 2001" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="codigoVendedor" class="block text-sm text-gray-600 mb-1">Código do Vendedor:</label>
+          <input type="number" id="codigoVendedor" required placeholder="Ex: 15" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="regiaoLoja" class="block text-sm text-gray-600 mb-1">Região da Loja:</label>
+          <select id="regiaoLoja" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="1">1 - Norte</option>
+            <option value="2">2 - Nordeste</option>
+            <option value="3">3 - Sudeste</option>
+            <option value="4">4 - Sul</option>
+          </select>
+        </div>
+        <div>
+          <label for="valorVenda" class="block text-sm text-gray-600 mb-1">Valor da Venda (R$):</label>
+          <input type="number" step="0.01" id="valorVenda" min="0" required placeholder="Ex: 2500.00" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+        </div>
+        <div>
+          <label for="tipoCliente" class="block text-sm text-gray-600 mb-1">Tipo de Cliente:</label>
+          <select id="tipoCliente" class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-brand outline-none">
+            <option value="PF">PF - Pessoa Física</option>
+            <option value="PJ">PJ - Pessoa Jurídica</option>
+          </select>
+        </div>
+        
+        <div class="md:col-span-3 flex flex-wrap gap-3 mt-4">
+          <button type="button" onclick="registrarVendas()" class="bg-brand hover:bg-brandHover text-white px-5 py-2 rounded font-medium transition shadow-sm">Registrar Venda</button>
+          <button type="button" onclick="gerarRelatorioVendas()" class="bg-gray-800 hover:bg-gray-900 text-white px-5 py-2 rounded font-medium transition shadow-sm">Gerar Relatório</button>
+        </div>
+      </form>
 
-    <label for="qtdproduzida">Quantidade Produzida:</label>
-    <input type="number" id="qtdproduzida" min="0" required placeholder="Ex: 1500"><br><br>
+      <div class="mt-6 pt-4 border-t border-gray-200">
+        <h3 class="font-bold text-gray-700 mb-2">Relatório de Vendas</h3>
+        <div id="resultadoVendas" class="bg-gray-50 p-4 rounded-lg min-h-[50px] text-sm text-gray-600">Nenhum dado gerado.</div>
+      </div>
+    </section>
 
-    <label for="custoUnitario">Custo Unitário (R$):</label>
-    <input type="number" step="0.01" id="custoUnitario" min="0" required placeholder="Ex: 25.50"><br><br>
-
-    <label for="estoqueInicial">Estoque Inicial:</label>
-    <input type="number" id="estoqueInicial" min="0" required placeholder="Ex: 200"><br><br>
-
-    <button type="button" onclick="cadastrarOrdem()">Cadastrar Ordem</button>
-    <button type="button" onclick="gerarRelatorioOrdem()">Gerar Relatório de Estoque</button>
-  </form>
-
-  <hr>
-
-  <h2>Relatório de Estoque</h2>
-  <div id="resultadoOrdem"></div>
-  <hr>
-
-  <!-- ----------------------------------------------------------- -->
-  
-  <h2>Exercício 4</h2>
-  <label for="valorBaseDiaria">Valor Base da Diária Padrão (R$):</label>
-  <input type="number" step="0.01" id="valorBaseDiaria" min="0" placeholder="Ex: 150.00"><br><br>
-  
-  <label for="valorCafedaManha">Valor do Café da Manhã (por Hóspede/Dia) (R$):</label>
-  <input type="number" step="0.01" id="valorCafedaManha" min="0" placeholder="Ex: 35.00">
-
-  <h2>Cadastrar Reserva</h2>
-  <form id="formReserva">
-    <label for="codigoreserva">Código da Reserva:</label>
-    <input type="number" id="codigoreserva" required placeholder="Ex: 1001"><br><br>
-
-    <label for="tipoDeQuarto">Tipo de Quarto:</label>
-    <select id="tipoDeQuarto">
-      <option value="1">1 - Standard</option>
-      <option value="2">2 - Luxo</option>
-      <option value="3">3 - Premium</option>
-    </select><br><br>
-
-    <label for="temporada">Temporada:</label>
-    <select id="temporada">
-      <option value="1">1 - Baixa</option>
-      <option value="2">2 - Alta</option>
-      <option value="3">3 - Feriado</option>
-    </select><br><br>
-
-    <label for="qtdDiarias">Quantidade de Diárias:</label>
-    <input type="number" id="qtdDiarias" min="1" required placeholder="Ex: 5"><br><br>
-
-    <label for="qtdHospedes">Número de Hóspedes:</label>
-    <input type="number" id="qtdHospedes" min="1" required placeholder="Ex: 2"><br><br>
-
-    <label>
-      <input type="checkbox" id="cafedaManhaInluso"> Café da manhã incluso? 
-    </label><br><br>
-
-    <button type="button" onclick="cadastrarReserva()">Cadastrar Reserva</button>
-    <button type="button" onclick="gerarRelatorioReserva()">Gerar Relatório de Reservas</button>
-  </form>
-
-  <hr>
-
-  <h2>Relatório de Reservas</h2>
-  <div id="resultadoReserva"></div>
-  
-  <hr>
-
-  <!-- --------------------------------------------------------------- -->
-  <!-- execício 5 -->
-  <h2>Exercício 5 - Treinos Esportivos</h2>
-
-  <label for="cargaMaximaSemanal">Carga Máxima Semanal (pts):</label>
-  <input type="number" id="cargaMaximaSemanal" min="1" placeholder="Ex: 300"><br><br>
-
-  <form id="formTreinos">
-    <label for="codigoTreino">Código do Treino:</label>
-    <input type="number" id="codigoTreino" required placeholder="Ex: 10"><br><br>
-
-    <label for="nomeJogador">Nome do Jogador:</label>
-    <input type="text" id="nomeJogador" required placeholder="Ex: João"><br><br>
-
-    <label for="posicaoJogador">Posição:</label>
-    <select id="posicaoJogador">
-      <option value="1">1 - Goleiro</option>
-      <option value="2">2 - Zagueiro</option>
-      <option value="3">3 - Meio-campo</option>
-      <option value="4">4 - Atacante</option>
-    </select><br><br>
-
-    <label for="tipoTreino">Tipo de Treino:</label>
-    <select id="tipoTreino">
-      <option value="1">1 - Físico</option>
-      <option value="2">2 - Técnico</option>
-      <option value="3">3 - Estratégico</option>
-    </select><br><br>
-
-    <label for="duracaoMin">Duração (minutos):</label>
-    <input type="number" id="duracaoMin" min="1" required placeholder="Ex: 90"><br><br>
-
-    <label for="intensidadeTreino">Intensidade (1 a 10):</label>
-    <input type="number" id="intensidadeTreino" min="1" max="10" required placeholder="Ex: 8"><br><br>
-
-    <button type="button" onclick="cadastrarTreino()">Cadastrar Treino</button>
-    <button type="button" onclick="gerarRelatorioTreinos()">Gerar Relatório de Treinos</button>
-  </form>
-
-  <br>
-  <hr>
-  <h2>Relatório de Treinos</h2>
-  <div id="resultadoTreinos"></div>
-  <hr>
-  <!-- --------------------------------------------------------------- -->
-  <!-- Exercício 6 -->
-  <h2>Exercício 6 - Sistema de Vendas com Comissões, Metas e Performance</h2>
-
-  <label for="metaMensalVendas">Meta Mensal de Vendas (R$):</label>
-  <input type="number" step="0.01" id="metaMensalVendas" min="0" placeholder="Ex: 10000.00"><br><br>
-
-  <label for="percentualBaseComissao">Percentual Base de Comissão (%):</label>
-  <input type="number" step="0.01" id="percentualBaseComissao" min="0" placeholder="Ex: 5"><br><br>
-
-  <h2>Registrar Venda</h2>
-  <form id="formVendas">
-    <label for="codigoVenda">Código da Venda:</label>
-    <input type="number" id="codigoVenda" required placeholder="Ex: 2001"><br><br>
-
-    <label for="codigoVendedor">Código do Vendedor:</label>
-    <input type="number" id="codigoVendedor" required placeholder="Ex: 15"><br><br>
-
-    <label for="regiaoLoja">Região da Loja:</label>
-    <select id="regiaoLoja">
-      <option value="1">1 - Norte</option>
-      <option value="2">2 - Nordeste</option>
-      <option value="3">3 - Sudeste</option>
-      <option value="4">4 - Sul</option>
-    </select><br><br>
-
-    <label for="valorVenda">Valor da Venda (R$):</label>
-    <input type="number" step="0.01" id="valorVenda" min="0" required placeholder="Ex: 2500.00"><br><br>
-
-    <label for="tipoCliente">Tipo de Cliente:</label>
-    <select id="tipoCliente">
-      <option value="PF">PF - Pessoa Física</option>
-      <option value="PJ">PJ - Pessoa Jurídica</option>
-    </select><br><br>
-
-    <button type="button" onclick="registrarVendas()">Registrar Venda</button>
-    <button type="button" onclick="gerarRelatorioVendas()">Gerar Relatório de Vendas</button>
-  </form>
-
-  <br>
-  <hr>
-  <h2>Relatório de Vendas</h2>
-  <div id="resultadoVendas"></div>
-  <hr>
+  </div>
 
   <script src="script.js"></script>
 </body>
