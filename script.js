@@ -582,7 +582,6 @@ function gerarRelatorioReserva(){
 }
 
 // --------------------------------------------------------------------------------------------
-// --------------------------------------------------------------------------------------------
 // Exercício 5 - Sistema de Treinos Esportivos com Carga e Risco de Lesão
 const listaDeTreinos = [];
 function cadastrarTreino() {
@@ -772,6 +771,184 @@ function gerarRelatorioTreinos() {
       <li><strong>Zagueiro:</strong> ${qtdZagueiro} treino(s) | Média: ${mediaZagueiro.toFixed(1)} pts</li>
       <li><strong>Meio-campo:</strong> ${qtdMeioCampo} treino(s) | Média: ${mediaMeioCampo.toFixed(1)} pts</li>
       <li><strong>Atacante:</strong> ${qtdAtacante} treino(s) | Média: ${mediaAtacante.toFixed(1)} pts</li>
+    </ul>
+  `;
+}
+// --------------------------------------------------------------------------------------------
+// Exercício 6 - Sistema de Vendas com Comissões, Metas e Performance
+const listaDeVendas = [];
+function registrarVendas() {
+  // entrada
+  const metaMensalVendas = parseFloat(document.getElementById("metaMensalVendas").value);
+  const percentualBaseComissao = parseFloat(document.getElementById("percentualBaseComissao").value);
+  const codigoVenda = parseInt(document.getElementById("codigoVenda").value);
+  const codigoVendedor = parseInt(document.getElementById("codigoVendedor").value);
+  const regiaoLoja = parseInt(document.getElementById("regiaoLoja").value);
+  const valorVenda = parseFloat(document.getElementById("valorVenda").value);
+  const tipoCliente = document.getElementById("tipoCliente").value.toUpperCase(); // 'PF' ou 'PJ'
+
+  // validação
+  if (isNaN(metaMensalVendas) || isNaN(percentualBaseComissao)) {
+    alert("Informe os valores de meta e percentual base corretamente!");
+    return;
+  }
+
+  if (isNaN(codigoVenda) || codigoVenda <= 0) {
+    alert("Código de venda inválido!");
+    return;
+  }
+
+  const vendasExistentes = listaDeVendas.map(v => v.codigoVenda);
+  if (vendasExistentes.includes(codigoVenda)) {
+    alert("Código de venda já cadastrado!");
+    return;
+  }
+
+  if (isNaN(valorVenda) || valorVenda <= 0) {
+    alert("Valor de venda inválido!");
+    return;
+  }
+
+  // cálculo da comissão
+  const comissaoBase = valorVenda * (percentualBaseComissao / 100);
+
+  let percentualBonusCliente = 0;
+  if (tipoCliente === 'PF') {
+    percentualBonusCliente = 0.02;
+  } else if (tipoCliente === 'PJ') {
+    percentualBonusCliente = 0.03;
+  }
+
+  let percentualBonusRegiao = 0;
+  switch (regiaoLoja) {
+    case 1: // Norte
+    case 2: // Nordeste
+      percentualBonusRegiao = 0.01;
+      break;
+    case 3: // Sudeste
+      percentualBonusRegiao = 0;
+      break;
+    case 4: // Sul
+      percentualBonusRegiao = 0.005;
+      break;
+    default:
+      alert("Região inválida! Use 1 a 4.");
+      return;
+  }
+
+  const bonusCliente = valorVenda * percentualBonusCliente;
+  const bonusRegiao = valorVenda * percentualBonusRegiao;
+  const comissaoTotal = comissaoBase + bonusCliente + bonusRegiao;
+
+  listaDeVendas.push({
+    codigoVenda,
+    codigoVendedor,
+    regiaoLoja,
+    valorVenda,
+    tipoCliente,
+    comissaoTotal
+  });
+
+  alert(`Venda ${codigoVenda} registrada com sucesso! Comissão gerada: R$ ${comissaoTotal.toFixed(2)}`);
+
+  document.getElementById("formVendas").reset();
+}
+
+function gerarRelatorioVendas() {
+  if (listaDeVendas.length === 0) {
+    alert("Nenhuma venda foi registrada!");
+    return;
+  }
+
+  const metaMensalVendas = parseFloat(document.getElementById("metaMensalVendas").value);
+
+  let totalVendidoGeral = 0;
+  let totalComissoesGeral = 0;
+
+  const totalPorRegiao = { 1: 0, 2: 0, 3: 0, 4: 0 };
+  const comissaoPorRegiao = { 1: 0, 2: 0, 3: 0, 4: 0 };
+  const qtdVendasRegiao = { 1: 0, 2: 0, 3: 0, 4: 0 };
+
+  let totalVendidoPF = 0;
+  let totalVendidoPJ = 0;
+
+  const consolidadoVendedores = {};
+
+  for (const v of listaDeVendas) {
+    totalVendidoGeral += v.valorVenda;
+    totalComissoesGeral += v.comissaoTotal;
+
+    totalPorRegiao[v.regiaoLoja] += v.valorVenda;
+    comissaoPorRegiao[v.regiaoLoja] += v.comissaoTotal;
+    qtdVendasRegiao[v.regiaoLoja]++;
+
+    if (v.tipoCliente === 'PF') totalVendidoPF += v.valorVenda;
+    else if (v.tipoCliente === 'PJ') totalVendidoPJ += v.valorVenda;
+r
+    if (!consolidadoVendedores[v.codigoVendedor]) {
+      consolidadoVendedores[v.codigoVendedor] = { totalVendas: 0, totalComissao: 0 };
+    }
+    consolidadoVendedores[v.codigoVendedor].totalVendas += v.valorVenda;
+    consolidadoVendedores[v.codigoVendedor].totalComissao += v.comissaoTotal;
+  }
+
+  let codVendedorMaiorVenda = null;
+  let codVendedorMaiorComissao = null;
+  let maiorVendaAcumulada = -1;
+  let maiorComissaoAcumulada = -1;
+  let qtdVendedoresBateramMeta = 0;
+
+  for (const codVendedor in consolidadoVendedores) {
+    const dados = consolidadoVendedores[codVendedor];
+
+    if (dados.totalVendas >= metaMensalVendas) {
+      qtdVendedoresBateramMeta++;
+    }
+
+    if (dados.totalVendas > maiorVendaAcumulada) {
+      maiorVendaAcumulada = dados.totalVendas;
+      codVendedorMaiorVenda = codVendedor;
+    }
+
+    if (dados.totalComissao > maiorComissaoAcumulada) {
+      maiorComissaoAcumulada = dados.totalComissao;
+      codVendedorMaiorComissao = codVendedor;
+    }
+  }
+
+  const comissaoMediaGeral = totalComissoesGeral / listaDeVendas.length;
+  
+  const getMediaRegiao = (regiao) => {
+    return qtdVendasRegiao[regiao] > 0 
+      ? (comissaoPorRegiao[regiao] / qtdVendasRegiao[regiao]) 
+      : 0;
+  };
+
+  const divResultado = document.getElementById("resultadoVendas");
+  divResultado.innerHTML = `
+    <h3>RELATÓRIO DE PERFORMANCE E COMISSÕES</h3>
+    <p><strong>Total de Vendas Registradas:</strong> ${listaDeVendas.length}</p>
+    <p><strong>Comissão Média Geral:</strong> R$ ${comissaoMediaGeral.toFixed(2)}</p>
+    <p><strong>Vendedores que Bateram a Meta (R$ ${metaMensalVendas.toFixed(2)}):</strong> ${qtdVendedoresBateramMeta}</p>
+
+    <h4>Destaques de Performance:</h4>
+    <ul>
+      <li><strong>Maior Volume de Vendas:</strong> Vendedor ${codVendedorMaiorVenda} (R$ ${maiorVendaAcumulada.toFixed(2)})</li>
+      <li><strong>Maior Comissão Acumulada:</strong> Vendedor ${codVendedorMaiorComissao} (R$ ${maiorComissaoAcumulada.toFixed(2)})</li>
+    </ul>
+
+    <h4>Valor Total Vendido por Tipo de Cliente:</h4>
+    <ul>
+      <li><strong>Pessoa Física (PF):</strong> R$ ${totalVendidoPF.toFixed(2)}</li>
+      <li><strong>Pessoa Jurídica (PJ):</strong> R$ ${totalVendidoPJ.toFixed(2)}</li>
+    </ul>
+
+    <h4>Valor Vendido e Comissão Média por Região:</h4>
+    <ul>
+      <li><strong>Norte (1):</strong> R$ ${totalPorRegiao[1].toFixed(2)} | Média de Comissão: R$ ${getMediaRegiao(1).toFixed(2)}</li>
+      <li><strong>Nordeste (2):</strong> R$ ${totalPorRegiao[2].toFixed(2)} | Média de Comissão: R$ ${getMediaRegiao(2).toFixed(2)}</li>
+      <li><strong>Sudeste (3):</strong> R$ ${totalPorRegiao[3].toFixed(2)} | Média de Comissão: R$ ${getMediaRegiao(3).toFixed(2)}</li>
+      <li><strong>Sul (4):</strong> R$ ${totalPorRegiao[4].toFixed(2)} | Média de Comissão: R$ ${getMediaRegiao(4).toFixed(2)}</li>
     </ul>
   `;
 }

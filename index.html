@@ -212,10 +212,54 @@
   </form>
 
   <br>
+  <hr>
   <h2>Relatório de Treinos</h2>
   <div id="resultadoTreinos"></div>
+  <hr>
+  <!-- --------------------------------------------------------------- -->
+  <!-- Exercício 6 -->
+  <h2>Exercício 6 - Sistema de Vendas com Comissões, Metas e Performance</h2>
 
-  <br><br>
+  <label for="metaMensalVendas">Meta Mensal de Vendas (R$):</label>
+  <input type="number" step="0.01" id="metaMensalVendas" min="0" placeholder="Ex: 10000.00"><br><br>
+
+  <label for="percentualBaseComissao">Percentual Base de Comissão (%):</label>
+  <input type="number" step="0.01" id="percentualBaseComissao" min="0" placeholder="Ex: 5"><br><br>
+
+  <h2>Registrar Venda</h2>
+  <form id="formVendas">
+    <label for="codigoVenda">Código da Venda:</label>
+    <input type="number" id="codigoVenda" required placeholder="Ex: 2001"><br><br>
+
+    <label for="codigoVendedor">Código do Vendedor:</label>
+    <input type="number" id="codigoVendedor" required placeholder="Ex: 15"><br><br>
+
+    <label for="regiaoLoja">Região da Loja:</label>
+    <select id="regiaoLoja">
+      <option value="1">1 - Norte</option>
+      <option value="2">2 - Nordeste</option>
+      <option value="3">3 - Sudeste</option>
+      <option value="4">4 - Sul</option>
+    </select><br><br>
+
+    <label for="valorVenda">Valor da Venda (R$):</label>
+    <input type="number" step="0.01" id="valorVenda" min="0" required placeholder="Ex: 2500.00"><br><br>
+
+    <label for="tipoCliente">Tipo de Cliente:</label>
+    <select id="tipoCliente">
+      <option value="PF">PF - Pessoa Física</option>
+      <option value="PJ">PJ - Pessoa Jurídica</option>
+    </select><br><br>
+
+    <button type="button" onclick="registrarVendas()">Registrar Venda</button>
+    <button type="button" onclick="gerarRelatorioVendas()">Gerar Relatório de Vendas</button>
+  </form>
+
+  <br>
+  <hr>
+  <h2>Relatório de Vendas</h2>
+  <div id="resultadoVendas"></div>
+  <hr>
 
   <script src="script.js"></script>
 </body>
