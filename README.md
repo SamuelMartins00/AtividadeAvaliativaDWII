@@ -13,7 +13,7 @@ Projeto acadêmico da disciplina de Desenvolvimento Web II, com 6 exercícios de
 
 ## Como executar
 
-Acesse este projeto [clicando aqui]( "githubPages")
+Acesse este projeto [clicando aqui]( "https://samuelmartins00.github.io/AtividadeAvaliativaDWII/")
 
 ## Exercícios
 
